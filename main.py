@@ -1,3 +1,5 @@
+def check_received_msg_integrity(msg):
+
 
 def transmit_msg(msg):
 
@@ -11,7 +13,7 @@ def transmit_msg(msg):
     return msg
 
 
-def modulo2_operation(a, b):
+def bit_num_xor_operation(a, b):
 
     result_bit_num = []
 
@@ -23,7 +25,7 @@ def modulo2_operation(a, b):
     return result_bit_num
 
 
-def calculate_crc_code(p,msg):
+def perform_modulo2_operation(p, msg):
 
     # p number is n+1
     n = p - 1
@@ -42,7 +44,7 @@ def calculate_crc_code(p,msg):
 
     while pos != len(msg):
 
-        temp_bit_num = modulo2_operation(temp_bit_num, p)
+        temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
 
         for bit in range(len(temp_bit_num)):
             # remove any 0's from the front of the number ex. 00010101 --> 10101
@@ -61,7 +63,7 @@ def calculate_crc_code(p,msg):
 
 def generate_final_message_with_crc_code(p, msg):
 
-    crc_code = calculate_crc_code(p, msg)
+    crc_code = perform_modulo2_operation(p, msg)
 
     return msg + crc_code
 
