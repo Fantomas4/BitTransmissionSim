@@ -1,4 +1,5 @@
-def check_received_msg_integrity(msg):
+def check_received_msg_integrity(msg, p):
+    remainder = perform_modulo2_operation(msg, p)
 
 
 def transmit_msg(msg):
@@ -7,7 +8,7 @@ def transmit_msg(msg):
 
         import random
 
-        if random.randint(1,1000) == 355:
+        if random.randint(1, 1000) == 355:
             msg[bit] = not msg[bit]
 
     return msg
@@ -15,20 +16,22 @@ def transmit_msg(msg):
 
 def bit_num_xor_operation(a, b):
 
+    p = str(b)
     result_bit_num = []
 
     from operator import xor
 
     for bit in range(len(a)):
-        result_bit_num.append(xor(bool(a[bit]), bool(b[bit])))
+        # LATHOS LATHOS
+        result_bit_num.append(xor(bool(a[bit]), bool(p[bit])))
 
     return result_bit_num
 
 
-def perform_modulo2_operation(p, msg):
+def perform_modulo2_operation(msg, p):
 
-    # p number is n+1
-    n = p - 1
+    # p number is n+1 bits
+    n = len(str(p)) - 1
 
     # add n 0's to the end of the msg
     for i in range(n):
@@ -61,9 +64,9 @@ def perform_modulo2_operation(p, msg):
     return temp_bit_num
 
 
-def generate_final_message_with_crc_code(p, msg):
+def generate_final_message_with_crc_code(msg, p):
 
-    crc_code = perform_modulo2_operation(p, msg)
+    crc_code = perform_modulo2_operation(msg, p)
 
     return msg + crc_code
 
@@ -88,8 +91,10 @@ def main():
     for i in range(msg_amount):
 
         generated_msg = generate_random_message(k_number)
-        final_msg_with_crc_code = generate_final_message_with_crc_code(p_number, generated_msg)
+        final_msg_with_crc_code = generate_final_message_with_crc_code(generated_msg, p_number)
         received_msg = transmit_msg(final_msg_with_crc_code)
+
+        msg_verification_success = check_received_msg_integrity(received_msg, p_number)
 
 
 if __name__ == "__main__":
