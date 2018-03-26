@@ -54,10 +54,16 @@ def calculate_crc_code(p,msg):
         # append the next bit of the original message to the end of the temp bit number used for the modulo 2
         temp_bit_num.append(msg[pos])
 
+    print("Diag - calculate_crc_code func: The FCS bit number is: ", temp_bit_num)
 
-def generate_final_message_with_crc_code(p,msg):
+    return temp_bit_num
 
-    CRC_code = calculate_crc_code(p,msg)
+
+def generate_final_message_with_crc_code(p, msg):
+
+    crc_code = calculate_crc_code(p, msg)
+
+    return msg + crc_code
 
 
 def generate_random_message(k):
@@ -66,7 +72,7 @@ def generate_random_message(k):
 
     for i in range(k):
         import random
-        msg.append(random.randint(0,1))
+        msg.append(random.randint(0, 1))
 
     return msg
 
@@ -80,7 +86,8 @@ def main():
     for i in range(msg_amount):
 
         generated_msg = generate_random_message(k_number)
-        received_msg = transmit_msg(generated_msg)
+        final_msg_with_crc_code = generate_final_message_with_crc_code(p_number, generated_msg)
+        received_msg = transmit_msg(final_msg_with_crc_code)
 
 
 if __name__ == "__main__":
