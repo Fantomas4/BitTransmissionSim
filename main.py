@@ -47,8 +47,13 @@ def bit_num_xor_operation(a, b):
     p = str(b)
     result_bit_num = []
 
+    print("DIAG - bit_num_xor_operation func: a is : ", a)
+    print("DIAG - bit_num_xor_operation func: p is : ", p)
+    print("DIAG - bit_num_xor_operation func: result_bit_num is : ", result_bit_num)
+
     from operator import xor
 
+    # LATHOS LATHOS
     for bit in range(len(a)):
         # LATHOS LATHOS
         result_bit_num.append(xor(bool(a[bit]), bool(p[bit])))
@@ -68,7 +73,11 @@ def perform_modulo2_operation(msg, p):
     # calculate the FCS number
 
     pos = n-1
-    temp_bit_num = msg
+    temp_bit_num = []
+
+    # start the modulo2 operation using the first n bit digits of the message
+    for bit in range(n):
+        temp_bit_num.append(msg[bit])
 
     # for bit in range(0, n-1):
     #     temp_bit_num.append(msg[bit])
