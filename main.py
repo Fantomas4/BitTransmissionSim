@@ -42,9 +42,8 @@ def transmit_msg(msg, log):
     return msg
 
 
-def bit_num_xor_operation(a, b):
+def bit_num_xor_operation(a, p):
 
-    p = str(b)
     result_bit_num = []
 
     print("DIAG - bit_num_xor_operation func: a is : ", a)
@@ -56,44 +55,61 @@ def bit_num_xor_operation(a, b):
     # LATHOS LATHOS
     for bit in range(len(a)):
         # LATHOS LATHOS
-        result_bit_num.append(xor(bool(a[bit]), bool(p[bit])))
+        print("Loop counter: ", bit)
+        print("DIAG - bit_num_xor_operation func: result_bit_num (in loop) is : ", result_bit_num)
+        print("DIAG - bit_num_xor_operation func: a[bit] is : ", a[bit])
+        print("DIAG - bit_num_xor_operation func: p[bit] is : ", p[bit])
+
+        result_bit_num.append(int(xor(bool(a[bit]), bool(p[bit]))))
 
     return result_bit_num
 
 
 def perform_modulo2_operation(msg, p):
 
+    print("DIAG - perform_modulo2_operation func: msg is: ", msg)
+
     # p number is n+1 bits
-    n = len(str(p)) - 1
+    n = len(p) - 1
 
     # add n 0's to the end of the msg
     for i in range(n):
         msg.append(0)
+
+    print("DIAG - perform_modulo2_operation func: msg after adding 0's is: ", msg)
 
     # calculate the FCS number
 
     pos = n-1
     temp_bit_num = []
 
-    # start the modulo2 operation using the first n bit digits of the message
-    for bit in range(n):
+    # start the modulo2 operation using the first n+1 bit digits of the message
+    for bit in range(n+1):
         temp_bit_num.append(msg[bit])
 
-    # for bit in range(0, n-1):
-    #     temp_bit_num.append(msg[bit])
+    print("DIAG - perform_modulo2_operation func: temp_bit_num is : ", temp_bit_num)
 
     while pos != len(msg):
 
         temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
 
-        for bit in range(len(temp_bit_num)):
-            # remove any 0's from the front of the number ex. 00010101 --> 10101
-            if temp_bit_num[bit] == 0:
-                del temp_bit_num[bit]
+        # remove any 0's from the front of the number ex. 00010101 --> 10101
+        i = 0
+        found_1 = False
+
+        while found_1 is False and i < len(temp_bit_num):
+
+            if temp_bit_num[i] == 0:
+                del temp_bit_num[i]
+            else:
+                found_1 = True
+
+            i += 1
+
+        # append the next bit of the original message to the end of the temp bit number used for the modulo 2
 
         pos += 1
 
-        # append the next bit of the original message to the end of the temp bit number used for the modulo 2
         temp_bit_num.append(msg[pos])
 
     print("Diag - calculate_crc_code func: The FCS bit number is: ", temp_bit_num)
@@ -116,6 +132,8 @@ def generate_random_message(k):
         import random
         msg.append(random.randint(0, 1))
 
+    print("DIAG - generate_random_message func: msg is: ", msg)
+
     return msg
 
 
@@ -124,6 +142,14 @@ def main():
     p_number = int(input("> Enter the P number (bits) you want to use: "))
     k_number = int(input("> Enter the k number (the length (amount of bits) of the messages to be transmitted: "))
     msg_amount = int(input("> Enter the amount of messages that should be transmitted during the simulation: "))
+
+    # convert the user int input for the p_number to a list containing int digits
+    temp_list = list(map(int, str(p_number)))
+
+    # the p_number is now a list of int digits
+    p_number = temp_list
+
+    print("$$$$$$$$$ p_number list is: ", temp_list)
 
     transmission_log = TransmissionInfoLog(msg_amount)
 
