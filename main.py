@@ -56,11 +56,11 @@ def bit_num_xor_operation(a, p):
     for bit in range(len(a)):
         # LATHOS LATHOS
         print("Loop counter: ", bit)
-        print("DIAG - bit_num_xor_operation func: result_bit_num (in loop) is : ", result_bit_num)
         print("DIAG - bit_num_xor_operation func: a[bit] is : ", a[bit])
         print("DIAG - bit_num_xor_operation func: p[bit] is : ", p[bit])
 
         result_bit_num.append(int(xor(bool(a[bit]), bool(p[bit]))))
+        print("DIAG - bit_num_xor_operation func: result_bit_num (in loop) is : ", result_bit_num)
 
     return result_bit_num
 
@@ -69,29 +69,28 @@ def perform_modulo2_operation(msg, p):
 
     print("DIAG - perform_modulo2_operation func: msg is: ", msg)
 
-    # p number is n+1 bits
-    n = len(p) - 1
-
+    # p number is n+1 bits, so we add n bits to the end of the msg
     # add n 0's to the end of the msg
-    for i in range(n):
+    for i in range(len(p) - 1):
         msg.append(0)
 
     print("DIAG - perform_modulo2_operation func: msg after adding 0's is: ", msg)
 
     # calculate the FCS number
 
-    pos = n-1
+    pos = len(p) - 1
     temp_bit_num = []
 
     # start the modulo2 operation using the first n+1 bit digits of the message
-    for bit in range(n+1):
+    for bit in range(len(p)):
         temp_bit_num.append(msg[bit])
 
     print("DIAG - perform_modulo2_operation func: temp_bit_num is : ", temp_bit_num)
 
-    while pos != len(msg):
+    while pos != len(msg) - 1:
 
         temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
+        print("DIAG - perform_modulo2_operation func: temp_bit_num (IN LOOP) is : ", temp_bit_num)
 
         # remove any 0's from the front of the number ex. 00010101 --> 10101
         i = 0
@@ -108,6 +107,7 @@ def perform_modulo2_operation(msg, p):
 
         # append the next bit of the original message to the end of the temp bit number used for the modulo 2
 
+        print("DIAG: pos is: ", pos)
         pos += 1
 
         temp_bit_num.append(msg[pos])
