@@ -105,12 +105,16 @@ def perform_modulo2_operation(msg, p):
 
             i += 1
 
-        # append the next bit of the original message to the end of the temp bit number used for the modulo 2
+        # if the amount of bits of the temp_bit_num used in the steps of the calculation
+        # is less than the amount of bits of the p number, append as many of the next
+        # bits of the original message are needed to the end of the temp bit number so
+        # that is matches the amount of bits of the p number
 
-        print("DIAG: pos is: ", pos)
-        pos += 1
-
-        temp_bit_num.append(msg[pos])
+        while len(temp_bit_num) < len(p):
+            print("%%%%%%%%% temp_bit_num is: ", temp_bit_num)
+            print("DIAG: pos is: ", pos)
+            pos += 1
+            temp_bit_num.append(msg[pos])
 
     print("Diag - calculate_crc_code func: The FCS bit number is: ", temp_bit_num)
 
