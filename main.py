@@ -67,14 +67,16 @@ def bit_num_xor_operation(a, p):
 
 def perform_modulo2_operation(msg, p):
 
-    print("DIAG - perform_modulo2_operation func: msg is: ", msg)
+    msg_copy = msg
+
+    print("DIAG - perform_modulo2_operation func: msg is: ", msg_copy)
 
     # p number is n+1 bits, so we add n bits to the end of the msg
     # add n 0's to the end of the msg
     for i in range(len(p) - 1):
-        msg.append(0)
+        msg_copy.append(0)
 
-    print("DIAG - perform_modulo2_operation func: msg after adding 0's is: ", msg)
+    print("DIAG - perform_modulo2_operation func: msg after adding 0's is: ", msg_copy)
 
     # calculate the FCS number
 
@@ -83,11 +85,11 @@ def perform_modulo2_operation(msg, p):
 
     # start the modulo2 operation using the first n+1 bit digits of the message
     for bit in range(len(p)):
-        temp_bit_num.append(msg[bit])
+        temp_bit_num.append(msg_copy[bit])
 
     print("DIAG - perform_modulo2_operation func: temp_bit_num is : ", temp_bit_num)
 
-    while pos != len(msg) - 1:
+    while pos != len(msg_copy) - 1:
 
         temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
         print("DIAG - perform_modulo2_operation func: temp_bit_num (IN LOOP) is : ", temp_bit_num)
@@ -112,14 +114,14 @@ def perform_modulo2_operation(msg, p):
         # bits of the original message are needed to the end of the temp bit number so
         # that is matches the amount of bits of the p number
 
-        print("DIAG: original msg is: ", msg)
+        print("DIAG: original msg is: ", msg_copy)
 
         while len(temp_bit_num) < len(p):
             print("%%%%%%%%% ADDING ZEROS TO THE END!")
             print("%%%%%%%%% temp_bit_num is: ", temp_bit_num)
             print("DIAG: pos is: ", pos)
             pos += 1
-            temp_bit_num.append(msg[pos])
+            temp_bit_num.append(msg_copy[pos])
 
     print("Diag - cperform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
 
@@ -129,7 +131,7 @@ def perform_modulo2_operation(msg, p):
 def generate_final_message_with_crc_code(msg, p):
 
     crc_code = perform_modulo2_operation(msg, p)
-
+    print("RETURNED MESSAGE + CRC_CODE", msg + crc_code)
     return msg + crc_code
 
 
@@ -165,10 +167,12 @@ def main():
     for i in range(msg_amount):
 
         generated_msg = generate_random_message(k_number)
+        print("generated_msg is: ", generated_msg)
         final_msg_with_crc_code = generate_final_message_with_crc_code(generated_msg, p_number)
         received_msg = transmit_msg(final_msg_with_crc_code, transmission_log)
 
         check_received_msg_integrity(received_msg, p_number, transmission_log)
+        print("MAIN LOOP ENDED")
 
     print("\n\n\n=============== Transmission Log Results ===============")
     print("* Total amount of messages transmitted: ", msg_amount)
