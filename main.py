@@ -93,30 +93,35 @@ def perform_modulo2_operation(msg, p):
         print("DIAG - perform_modulo2_operation func: temp_bit_num (IN LOOP) is : ", temp_bit_num)
 
         # remove any 0's from the front of the number ex. 00010101 --> 10101
-        i = 0
-        found_1 = False
 
-        while found_1 is False and i < len(temp_bit_num):
+        for i in range(len(temp_bit_num)):
 
-            if temp_bit_num[i] == 0:
-                del temp_bit_num[i]
+            print("(((((( i is : ", i)
+            print(")))))) temp_bit_num: ", temp_bit_num)
+            if temp_bit_num[0] == 0:
+                del temp_bit_num[0]
+                print("MPIKA 1")
             else:
-                found_1 = True
+                break
+                print("MPIKA 2")
 
-            i += 1
+        print("DIAG  - perform_modulo2_operation func: ^^^^^ NUMBER AFTER REMOVING 0's from the front is: ", temp_bit_num)
 
         # if the amount of bits of the temp_bit_num used in the steps of the calculation
         # is less than the amount of bits of the p number, append as many of the next
         # bits of the original message are needed to the end of the temp bit number so
         # that is matches the amount of bits of the p number
 
+        print("DIAG: original msg is: ", msg)
+
         while len(temp_bit_num) < len(p):
+            print("%%%%%%%%% ADDING ZEROS TO THE END!")
             print("%%%%%%%%% temp_bit_num is: ", temp_bit_num)
             print("DIAG: pos is: ", pos)
             pos += 1
             temp_bit_num.append(msg[pos])
 
-    print("Diag - calculate_crc_code func: The FCS bit number is: ", temp_bit_num)
+    print("Diag - cperform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
 
     return temp_bit_num
 
