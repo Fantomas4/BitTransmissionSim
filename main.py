@@ -104,8 +104,8 @@ def perform_modulo2_operation(msg, p):
                 del temp_bit_num[0]
                 print("MPIKA 1")
             else:
-                break
                 print("MPIKA 2")
+                break
 
         print("DIAG  - perform_modulo2_operation func: ^^^^^ NUMBER AFTER REMOVING 0's from the front is: ", temp_bit_num)
 
