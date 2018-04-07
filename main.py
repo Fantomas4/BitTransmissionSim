@@ -67,9 +67,10 @@ def bit_num_xor_operation(a, p):
 
 def perform_modulo2_operation(msg, p):
 
-    msg_copy = msg
+    # a copy of the msg (list) is created, since changing the original msg list will also change the original msg.
+    msg_copy = list(msg)
 
-    print("DIAG - perform_modulo2_operation func: msg is: ", msg_copy)
+    print("DIAG - perform_modulo2_operation func: msg_copy is: ", msg_copy)
 
     # p number is n+1 bits, so we add n bits to the end of the msg
     # add n 0's to the end of the msg
@@ -116,14 +117,27 @@ def perform_modulo2_operation(msg, p):
 
         print("DIAG: original msg is: ", msg_copy)
 
-        while len(temp_bit_num) < len(p):
+        # # start from the - length of p - digit of the msg
+        # pos += 1
+
+        while len(temp_bit_num) < len(p) and pos != len(msg_copy) - 1:
+            pos += 1
+
             print("%%%%%%%%% ADDING ZEROS TO THE END!")
             print("%%%%%%%%% temp_bit_num is: ", temp_bit_num)
             print("DIAG: pos is: ", pos)
-            pos += 1
+
             temp_bit_num.append(msg_copy[pos])
 
-    print("Diag - cperform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
+
+    # if the final fcs number result has less digits than the amount of digits of the
+    # original p number, we add as many digits as is needed to the front of the final fcs
+    # number, to match the size of the original p_number
+
+    while len(temp_bit_num) < len(p):
+        temp_bit_num.insert(0, 0)
+
+    print("Diag - perform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
 
     return temp_bit_num
 
