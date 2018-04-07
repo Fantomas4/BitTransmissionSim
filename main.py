@@ -16,7 +16,11 @@ class TransmissionInfoLog:
 
 def check_received_msg_integrity(msg, p, log):
 
+    print("Entered check_received_msg_integrity func^^^^^^^^^^^^^^^")
+
     remainder = perform_modulo2_operation(msg, p)
+
+    print("DIAG - check_received_msg_integrity: remainder is: ", remainder)
 
     if remainder is 0:
         pass
