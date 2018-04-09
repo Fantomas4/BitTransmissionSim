@@ -84,10 +84,10 @@ def perform_modulo2_operation(msg, p):
     # if any 0's exist at the beginning of the number, remove them before using the first
     # n+1 bit digits of the message for the calculation
 
-    for i in range(len(temp_bit_num)):
+    for i in range(len(msg_copy)):
 
-        if temp_bit_num[0] == 0:
-            del temp_bit_num[0]
+        if msg_copy[0] == 0:
+            del msg_copy[0]
         else:
             break
 
