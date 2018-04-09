@@ -71,20 +71,35 @@ def bit_num_xor_operation(a, p):
 
 def perform_modulo2_operation(msg, p):
 
-    print("DIAG - perform_modulo2_operation func: msg is: ", msg)
+    # a copy of the msg (list) is created, since changing the original msg list will also change the original msg.
+    msg_copy = list(msg)
+
+    print("DIAG - perform_modulo2_operation func: INITIAL msg_copy is: ", msg_copy)
 
     # calculate the FCS number
 
     pos = len(p) - 1
     temp_bit_num = []
 
+    # if any 0's exist at the beginning of the number, remove them before using the first
+    # n+1 bit digits of the message for the calculation
+
+    for i in range(len(temp_bit_num)):
+
+        if temp_bit_num[0] == 0:
+            del temp_bit_num[0]
+        else:
+            break
+
+    print("DIAG: AFTER msg_copy is: ", msg_copy)
+
     # start the modulo2 operation using the first n+1 bit digits of the message
     for bit in range(len(p)):
-        temp_bit_num.append(msg[bit])
+        temp_bit_num.append(msg_copy[bit])
 
-    print("DIAG - perform_modulo2_operation func: temp_bit_num is : ", temp_bit_num)
+    print("DIAG - perform_modulo2_operation func: temp_bit_num BEFORE CALCULATION LOOP is : ", temp_bit_num)
 
-    while pos != len(msg) - 1:
+    while pos != len(msg_copy) - 1:
 
         temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
         print("DIAG - perform_modulo2_operation func: temp_bit_num (IN LOOP) is : ", temp_bit_num)
@@ -102,25 +117,23 @@ def perform_modulo2_operation(msg, p):
                 print("MPIKA 2")
                 break
 
-        print("DIAG  - perform_modulo2_operation func: ^^^^^ NUMBER AFTER REMOVING 0's from the front is: ", temp_bit_num)
+        print("DIAG  - perform_modulo2_operation func: ^^^^^ temp_bit_num AFTER REMOVING 0's from the front is: ", temp_bit_num)
 
         # if the amount of bits of the temp_bit_num used in the steps of the calculation
         # is less than the amount of bits of the p number, append as many of the next
         # bits of the original message are needed to the end of the temp bit number so
         # that is matches the amount of bits of the p number
 
-        print("DIAG: original msg is: ", msg)
-
         # # start from the - length of p - digit of the msg
         # pos += 1
 
-        while len(temp_bit_num) < len(p) and pos != len(msg) - 1:
+        while len(temp_bit_num) < len(p) and pos != len(msg_copy) - 1:
             pos += 1
 
             print("%%%%%%%%% temp_bit_num is: ", temp_bit_num)
             print("DIAG: pos is: ", pos)
 
-            temp_bit_num.append(msg[pos])
+            temp_bit_num.append(msg_copy[pos])
 
         # remove any 0's from the front of the number ex. 00010101 --> 10101
 
@@ -138,9 +151,9 @@ def perform_modulo2_operation(msg, p):
 
     # if the final fcs number result has less digits than the amount of digits of the
     # original p number, we add as many digits as is needed to the front of the final fcs
-    # number, to match the size of the original p_number
+    # number, to match the size of the original p_number - 1
 
-    while len(temp_bit_num) < len(p):
+    while len(temp_bit_num) < len(p) - 1:
         temp_bit_num.insert(0, 0)
 
     print("Diag - perform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
