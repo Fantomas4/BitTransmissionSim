@@ -50,21 +50,20 @@ def bit_num_xor_operation(a, p):
 
     result_bit_num = []
 
-    print("DIAG - bit_num_xor_operation func: a is : ", a)
-    print("DIAG - bit_num_xor_operation func: p is : ", p)
-    print("DIAG - bit_num_xor_operation func: result_bit_num is : ", result_bit_num)
+    # print("DIAG - bit_num_xor_operation func: a is : ", a)
+    # print("DIAG - bit_num_xor_operation func: p is : ", p)
+    # print("DIAG - bit_num_xor_operation func: result_bit_num is : ", result_bit_num)
 
     from operator import xor
 
     # LATHOS LATHOS
     for bit in range(len(a)):
         # LATHOS LATHOS
-        print("Loop counter: ", bit)
-        print("DIAG - bit_num_xor_operation func: a[bit] is : ", a[bit])
-        print("DIAG - bit_num_xor_operation func: p[bit] is : ", p[bit])
+        # print("DIAG - bit_num_xor_operation func: a[bit] is : ", a[bit])
+        # print("DIAG - bit_num_xor_operation func: p[bit] is : ", p[bit])
 
         result_bit_num.append(int(xor(bool(a[bit]), bool(p[bit]))))
-        print("DIAG - bit_num_xor_operation func: result_bit_num (in loop) is : ", result_bit_num)
+        # print("DIAG - bit_num_xor_operation func: result_bit_num (in loop) is : ", result_bit_num)
 
     return result_bit_num
 
@@ -76,20 +75,7 @@ def perform_modulo2_operation(msg, p):
 
     temp_bit_num = []
 
-    # if any 0's exist at the beginning of the number, remove them before using the first
-    # n+1 bit digits of the message for the calculation
-
-    for i in range(len(msg_copy)):
-
-        if msg_copy[0] == 0:
-            del msg_copy[0]
-        else:
-            break
-
-    print("DIAG: AFTER msg_copy is: ", msg_copy)
-
-
-    # print("DIAG - perform_modulo2_operation func: INITIAL msg_copy is: ", msg_copy)
+    print("DIAG - perform_modulo2_operation func: INITIAL msg_copy is: ", msg_copy)
     #
     # # calculate the FCS number
     #
@@ -117,27 +103,32 @@ def perform_modulo2_operation(msg, p):
     pos = 0
 
     while pos < len(msg_copy):
+        # when the last digit of the msg is used, the loop must exit
 
-        while len(temp_bit_num) < len(p):
+        #print("MAIN LOOOOOOOOOOOP COUNTER: ", pos)
 
-            # remove any 0's from the front of the number ex. 00010101 --> 10101
+        # remove any 0's from the front of the number ex. 00010101 --> 10101
 
-            for k in range(len(temp_bit_num)):
+        for k in range(len(temp_bit_num)):
 
-                if temp_bit_num[0] == 0:
-                    del temp_bit_num[0]
-                else:
-                    break
+            if temp_bit_num[0] == 0:
+                del temp_bit_num[0]
+            else:
+                break
 
-            # copy as many digits from the original message as are needed to match the length of the p_number
+        # copy as many digits from the original message as are needed to match the length of the p_number
 
-            while len(temp_bit_num) < len(p):
+        while len(temp_bit_num) < len(p) and pos < len(msg_copy):
 
-                temp_bit_num.append(msg_copy[pos])
+            temp_bit_num.append(msg_copy[pos])
 
-                pos += 1
+            pos += 1
 
-        temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
+        if len(temp_bit_num) == len(p):
+            temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
+
+        # import time
+        # time.sleep(0.5)
 
 
 
@@ -197,13 +188,22 @@ def perform_modulo2_operation(msg, p):
     #             break
 
 
+    # remove any 0's from the front of the number ex. 00010101 --> 10101
+
+    for k in range(len(temp_bit_num)):
+
+        if temp_bit_num[0] == 0:
+            del temp_bit_num[0]
+        else:
+            break
 
 
-    # if the final fcs number result has less digits than the amount of digits of the
-    # original p number, we add as many digits as is needed to the front of the final fcs
+    # if the final fcs number result has less than the amount of digits of the
+    # original p number - 1, we add as many digits as is needed to the front of the final fcs
     # number, to match the size of the original p_number - 1
-
+    print("DIAG: TEMP BIT NUM******************************************************************", temp_bit_num)
     while len(temp_bit_num) < len(p) - 1:
+        print("MPIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIKA")
         temp_bit_num.insert(0, 0)
 
     print("Diag - perform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
@@ -267,7 +267,7 @@ def main():
         received_msg = transmit_msg(final_msg_with_crc_code, transmission_log)
 
         check_received_msg_integrity(received_msg, p_number, transmission_log)
-        print("MAIN LOOP ENDED")
+        print("MAIN LOOP ENDED\n\n\n\n")
 
     print("\n\n\n=============== Transmission Log Results ===============")
     print("* Total amount of messages transmitted: ", msg_amount)
