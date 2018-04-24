@@ -36,6 +36,7 @@ def transmit_msg(msg, log):
 
         import random
 
+        #if random.randint(1, 10) == 5:
         if random.randint(1, 1000) == 355:
             msg[bit] = not msg[bit]
             error_in_msg = True
@@ -50,20 +51,11 @@ def bit_num_xor_operation(a, p):
 
     result_bit_num = []
 
-    # print("DIAG - bit_num_xor_operation func: a is : ", a)
-    # print("DIAG - bit_num_xor_operation func: p is : ", p)
-    # print("DIAG - bit_num_xor_operation func: result_bit_num is : ", result_bit_num)
-
     from operator import xor
 
-    # LATHOS LATHOS
     for bit in range(len(a)):
-        # LATHOS LATHOS
-        # print("DIAG - bit_num_xor_operation func: a[bit] is : ", a[bit])
-        # print("DIAG - bit_num_xor_operation func: p[bit] is : ", p[bit])
 
         result_bit_num.append(int(xor(bool(a[bit]), bool(p[bit]))))
-        # print("DIAG - bit_num_xor_operation func: result_bit_num (in loop) is : ", result_bit_num)
 
     return result_bit_num
 
@@ -76,36 +68,11 @@ def perform_modulo2_operation(msg, p):
     temp_bit_num = []
 
     print("DIAG - perform_modulo2_operation func: INITIAL msg_copy is: ", msg_copy)
-    #
-    # # calculate the FCS number
-    #
-    # pos = len(p) - 1
-    # temp_bit_num = []
-    #
-    # # if any 0's exist at the beginning of the number, remove them before using the first
-    # # n+1 bit digits of the message for the calculation
-    #
-    # for i in range(len(msg_copy)):
-    #
-    #     if msg_copy[0] == 0:
-    #         del msg_copy[0]
-    #     else:
-    #         break
-    #
-    # print("DIAG: AFTER msg_copy is: ", msg_copy)
-    #
-    # # start the modulo2 operation using the first n+1 bit digits of the message
-    # for bit in range(len(p)):
-    #     temp_bit_num.append(msg_copy[bit])
-    #
-    # print("DIAG - perform_modulo2_operation func: temp_bit_num BEFORE CALCULATION LOOP is : ", temp_bit_num)
 
     pos = 0
 
     while pos < len(msg_copy):
         # when the last digit of the msg is used, the loop must exit
-
-        #print("MAIN LOOOOOOOOOOOP COUNTER: ", pos)
 
         # remove any 0's from the front of the number ex. 00010101 --> 10101
 
@@ -126,67 +93,6 @@ def perform_modulo2_operation(msg, p):
 
         if len(temp_bit_num) == len(p):
             temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
-
-        # import time
-        # time.sleep(0.5)
-
-
-
-
-    # while pos < len(msg_copy) - 1:
-    #
-    #     # import time
-    #     # time.sleep(0.5)
-    #
-    #     print("DIAG: pos is:=========================================================== ", pos)
-    #
-    #     temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
-    #     print("DIAG - perform_modulo2_operation func: temp_bit_num (IN LOOP) is : ", temp_bit_num)
-    #
-    #     # remove any 0's from the front of the number ex. 00010101 --> 10101
-    #
-    #     for i in range(len(temp_bit_num)):
-    #
-    #         print("(((((( i is : ", i)
-    #         print(")))))) temp_bit_num: ", temp_bit_num)
-    #         if temp_bit_num[0] == 0:
-    #             del temp_bit_num[0]
-    #             print("MPIKA 1")
-    #         else:
-    #             print("MPIKA 2")
-    #             break
-    #
-    #     print("DIAG  - perform_modulo2_operation func: ^^^^^ temp_bit_num AFTER REMOVING 0's from the front is: ", temp_bit_num)
-    #
-    #     # if the amount of bits of the temp_bit_num used in the steps of the calculation
-    #     # is less than the amount of bits of the p number, append as many of the next
-    #     # bits of the original message are needed to the end of the temp bit number so
-    #     # that is matches the amount of bits of the p number
-    #
-    #     # # start from the - length of p - digit of the msg
-    #     # pos += 1
-    #
-    #     while len(temp_bit_num) < len(p) and pos < len(msg_copy) - 1:
-    #         pos += 1
-    #
-    #         print("%%%%%%%%% temp_bit_num is: ", temp_bit_num)
-    #         print("DIAG: pos is: ", pos)
-    #
-    #         temp_bit_num.append(msg_copy[pos])
-    #
-    #     # remove any 0's from the front of the number ex. 00010101 --> 10101
-    #
-    #     for i in range(len(temp_bit_num)):
-    #
-    #         print("(((((( i is : ", i)
-    #         print(")))))) temp_bit_num: ", temp_bit_num)
-    #         if temp_bit_num[0] == 0:
-    #             del temp_bit_num[0]
-    #             print("MPIKA 1")
-    #         else:
-    #             print("MPIKA 2")
-    #             break
-
 
     # remove any 0's from the front of the number ex. 00010101 --> 10101
 
@@ -245,6 +151,17 @@ def generate_random_message(k):
 
 def main():
 
+    print("\n\n===========================================================================================================")
+    print(""" 
+  ____  _ _ _______                            _         _              _____ _           
+ |  _ \(_) |__   __|                          (_)       (_)            / ____(_)          
+ | |_) |_| |_ | |_ __ __ _ _ __  ___ _ __ ___  _ ___ ___ _  ___  _ __ | (___  _ _ __ ___  
+ |  _ <| | __|| | '__/ _` | '_ \/ __| '_ ` _ \| / __/ __| |/ _ \| '_ \ \___ \| | '_ ` _ \ 
+ | |_) | | |_ | | | | (_| | | | \__ \ | | | | | \__ \__ \ | (_) | | | |____) | | | | | | |
+ |____/|_|\__||_|_|  \__,_|_| |_|___/_| |_| |_|_|___/___/_|\___/|_| |_|_____/|_|_| |_| |_|
+                                                                                                                                                                                   
+ """)
+
     p_number = int(input("> Enter the P number (bits) you want to use: "))
     k_number = int(input("> Enter the k number (the length (amount of bits) of the messages to be transmitted: "))
     msg_amount = int(input("> Enter the amount of messages that should be transmitted during the simulation: "))
@@ -271,8 +188,8 @@ def main():
 
     print("\n\n\n=============== Transmission Log Results ===============")
     print("* Total amount of messages transmitted: ", msg_amount)
-    print("* Total amount of messages that were actually transmitted containing bit errors: ", transmission_log.incorrect_msg_transferred_count)
-    print("* Total amount of messages that were correctly detected by the CRC as corrupted: ", transmission_log.incorrect_msg_detected_count)
+    print("* Total amount of messages that were transmitted actually containing bit errors: ", transmission_log.incorrect_msg_transferred_count, " (", transmission_log.incorrect_msg_transferred_count/msg_amount * 100, "%)")
+    print("* Total amount of messages that were correctly detected by the CRC as corrupted: ", transmission_log.incorrect_msg_detected_count, " (", transmission_log.incorrect_msg_detected_count/msg_amount * 100, "%)")
 
 
 if __name__ == "__main__":
