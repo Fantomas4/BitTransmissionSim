@@ -16,11 +16,7 @@ class TransmissionInfoLog:
 
 def check_received_msg_integrity(msg, p, log):
 
-    print("Entered check_received_msg_integrity func^^^^^^^^^^^^^^^")
-
     remainder = perform_modulo2_operation(msg, p)
-
-    print("DIAG - check_received_msg_integrity: remainder is: ", remainder)
 
     if 1 in remainder:
         log.inc_detected_count()
@@ -67,8 +63,6 @@ def perform_modulo2_operation(msg, p):
 
     temp_bit_num = []
 
-    print("DIAG - perform_modulo2_operation func: INITIAL msg_copy is: ", msg_copy)
-
     pos = 0
 
     while pos < len(msg_copy):
@@ -103,16 +97,11 @@ def perform_modulo2_operation(msg, p):
         else:
             break
 
-
     # if the final fcs number result has less than the amount of digits of the
     # original p number - 1, we add as many digits as is needed to the front of the final fcs
     # number, to match the size of the original p_number - 1
-    print("DIAG: TEMP BIT NUM******************************************************************", temp_bit_num)
     while len(temp_bit_num) < len(p) - 1:
-        print("MPIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIKA")
         temp_bit_num.insert(0, 0)
-
-    print("Diag - perform_modulo2_operation func: The FCS bit number is: ", temp_bit_num)
 
     return temp_bit_num
 
@@ -127,11 +116,7 @@ def generate_final_message_with_crc_code(msg, p):
     for i in range(len(p) - 1):
         msg_copy.append(0)
 
-    print("DIAG - generate_final_message_with_crc_code func: msg after adding 0's is: ", msg_copy)
-
     crc_code = perform_modulo2_operation(msg_copy, p)
-
-    print("RETURNED MESSAGE + CRC_CODE", msg + crc_code)
 
     return msg + crc_code
 
@@ -144,14 +129,11 @@ def generate_random_message(k):
         import random
         msg.append(random.randint(0, 1))
 
-    print("DIAG - generate_random_message func: msg is: ", msg)
-
     return msg
 
 
 def main():
 
-    print("\n\n===========================================================================================================")
     print(""" 
   ____  _ _ _______                            _         _              _____ _           
  |  _ \(_) |__   __|                          (_)       (_)            / ____(_)          
@@ -161,6 +143,9 @@ def main():
  |____/|_|\__||_|_|  \__,_|_| |_|___/_| |_| |_|_|___/___/_|\___/|_| |_|_____/|_|_| |_| |_|
                                                                                                                                                                                    
  """)
+    print("===========================================================================================\n")
+
+    print("> Welcome to the BitTransmissionSim.\n")
 
     p_number = int(input("> Enter the P number (bits) you want to use: "))
     k_number = int(input("> Enter the k number (the length (amount of bits) of the messages to be transmitted: "))
@@ -172,19 +157,23 @@ def main():
     # the p_number is now a list of int digits
     p_number = temp_list
 
-    print("$$$$$$$$$ p_number list is: ", temp_list)
-
     transmission_log = TransmissionInfoLog(msg_amount)
+
+    print("\n> Initializing Simulation...\n")
+
+    import sys
 
     for i in range(msg_amount):
 
         generated_msg = generate_random_message(k_number)
-        print("generated_msg is: ", generated_msg)
+        # print("generated_msg is: ", generated_msg)
         final_msg_with_crc_code = generate_final_message_with_crc_code(generated_msg, p_number)
         received_msg = transmit_msg(final_msg_with_crc_code, transmission_log)
 
         check_received_msg_integrity(received_msg, p_number, transmission_log)
-        print("MAIN LOOP ENDED\n\n\n\n")
+
+        sys.stdout.write("\r> Generated, transmitted and checked %d out of %d total messages..." % (i+1, msg_amount))
+        sys.stdout.flush()
 
     print("\n\n\n=============== Transmission Log Results ===============")
     print("* Total amount of messages transmitted: ", msg_amount)
