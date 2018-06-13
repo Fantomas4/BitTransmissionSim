@@ -24,16 +24,24 @@ def check_received_msg_integrity(msg, p, log):
         pass
 
 
-def transmit_msg(msg, log):
+def transmit_msg(msg, log, e_number):
+
+    e_str = str(e_number)
+
+    if "." in e_str:
+        e_len = len(e_str) - 1
+    else:
+        e_len = len(e_str)
+
+    accuracy = 10 ** e_len
 
     error_in_msg = False
 
+    import random
+
     for bit in range(len(msg)):
 
-        import random
-
-        #if random.randint(1, 10) == 5:
-        if random.randint(1, 1000) == 355:
+        if random.randint(1, accuracy) <= e_number * accuracy:
             msg[bit] = not msg[bit]
             error_in_msg = True
 
@@ -132,6 +140,40 @@ def generate_random_message(k):
     return msg
 
 
+def run_simulation(p_number, k_number, e_number, msg_amount):
+
+    transmission_log = TransmissionInfoLog(msg_amount)
+
+    print("\n> Initializing Simulation...\n")
+
+    import sys
+
+    for i in range(msg_amount):
+        generated_msg = generate_random_message(k_number)
+        # print("generated_msg is: ", generated_msg)
+        final_msg_with_crc_code = generate_final_message_with_crc_code(generated_msg, p_number)
+        received_msg = transmit_msg(final_msg_with_crc_code, transmission_log, e_number)
+
+        check_received_msg_integrity(received_msg, p_number, transmission_log)
+
+        sys.stdout.write("\r> Generated, transmitted and checked %d out of %d total messages..." % (i + 1, msg_amount))
+        sys.stdout.flush()
+
+    print_transmission_log(transmission_log)
+
+
+def print_transmission_log(log):
+
+    print("\n\n\n=============== Transmission Log Results ===============")
+    print("* Total amount of messages transmitted: ", log.total_msg_transferred)
+    print("* Total amount of messages that were transmitted actually containing bit errors: ",
+          log.incorrect_msg_transferred_count, " (",
+          log.incorrect_msg_transferred_count / log.total_msg_transferred * 100, "%)")
+    print("* Total amount of messages that were correctly detected by the CRC as corrupted: ",
+          log.incorrect_msg_detected_count, " (",
+          log.incorrect_msg_detected_count / log.total_msg_transferred * 100, "%)")
+
+
 def main():
 
     print(""" 
@@ -148,7 +190,9 @@ def main():
     print("> Welcome to the BitTransmissionSim.\n")
 
     p_number = int(input("> Enter the P number (bits) you want to use: "))
-    k_number = int(input("> Enter the k number (the length (amount of bits) of the messages to be transmitted: "))
+    k_number = int(input("> Enter the k number (the amount of bits of the messages to be used: "))
+    e_number = float(input("> Enter the Error Rate for the simulation: "))
+    print("DIAG: e_number is: ", e_number)
     msg_amount = int(input("> Enter the amount of messages that should be transmitted during the simulation: "))
 
     # convert the user int input for the p_number to a list containing int digits
@@ -157,28 +201,11 @@ def main():
     # the p_number is now a list of int digits
     p_number = temp_list
 
-    transmission_log = TransmissionInfoLog(msg_amount)
+    run_simulation(p_number, k_number, e_number, msg_amount)
 
-    print("\n> Initializing Simulation...\n")
-
-    import sys
-
-    for i in range(msg_amount):
-
-        generated_msg = generate_random_message(k_number)
-        # print("generated_msg is: ", generated_msg)
-        final_msg_with_crc_code = generate_final_message_with_crc_code(generated_msg, p_number)
-        received_msg = transmit_msg(final_msg_with_crc_code, transmission_log)
-
-        check_received_msg_integrity(received_msg, p_number, transmission_log)
-
-        sys.stdout.write("\r> Generated, transmitted and checked %d out of %d total messages..." % (i+1, msg_amount))
-        sys.stdout.flush()
-
-    print("\n\n\n=============== Transmission Log Results ===============")
-    print("* Total amount of messages transmitted: ", msg_amount)
-    print("* Total amount of messages that were transmitted actually containing bit errors: ", transmission_log.incorrect_msg_transferred_count, " (", transmission_log.incorrect_msg_transferred_count/msg_amount * 100, "%)")
-    print("* Total amount of messages that were correctly detected by the CRC as corrupted: ", transmission_log.incorrect_msg_detected_count, " (", transmission_log.incorrect_msg_detected_count/msg_amount * 100, "%)")
+    print("\n\n\n")
+    input("> Press ENTER to exit...")
+    quit()
 
 
 if __name__ == "__main__":
