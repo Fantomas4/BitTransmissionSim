@@ -189,10 +189,9 @@ def main():
 
     print("> Welcome to the BitTransmissionSim.\n")
 
-    p_number = int(input("> Enter the P number (bits) you want to use: "))
-    k_number = int(input("> Enter the k number (the amount of bits of the messages to be used: "))
-    e_number = float(input("> Enter the Error Rate for the simulation: "))
-    print("DIAG: e_number is: ", e_number)
+    p_number = int(input("> Enter the P number (in bits) you want to use: "))
+    k_number = int(input("> Enter the k number (the length in bits of each message that will be generated): "))
+    e_number = float(input("> Enter the Bit Error Rate for the simulation: "))
     msg_amount = int(input("> Enter the amount of messages that should be transmitted during the simulation: "))
 
     # convert the user int input for the p_number to a list containing int digits
