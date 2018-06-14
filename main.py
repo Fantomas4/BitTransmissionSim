@@ -191,7 +191,7 @@ def main():
 
     p_number = int(input("> Enter the P number (in bits) you want to use: "))
     k_number = int(input("> Enter the k number (the length in bits of each message that will be generated): "))
-    e_number = float(input("> Enter the Bit Error Rate for the simulation: "))
+    e_number = float(input("> Enter the E number (Bit Error Rate) for the simulation: "))
     msg_amount = int(input("> Enter the amount of messages that should be transmitted during the simulation: "))
 
     # convert the user int input for the p_number to a list containing int digits
