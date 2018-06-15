@@ -19,6 +19,9 @@ def check_received_msg_integrity(msg, p, log):
     remainder = perform_modulo2_operation(msg, p)
 
     if 1 in remainder:
+        # if at least a non-zero bit is included in the remainder bit list,
+        # meaning the bit list represents a non-zero remainder,
+        # then the message that was checked contained errors
         log.inc_detected_count()
     else:
         pass
