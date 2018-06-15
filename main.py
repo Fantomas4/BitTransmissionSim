@@ -28,10 +28,11 @@ def transmit_msg(msg, log, e_number):
 
     e_str = str(e_number)
 
-    if "." in e_str:
-        e_len = len(e_str) - 1
-    else:
-        e_len = len(e_str)
+    # Since the e_number contains a decimal point,
+    # then the calculated length should be
+    # the e_number string's characters minus the
+    # decimal point character
+    e_len = len(e_str) - 1
 
     accuracy = 10 ** e_len
 
