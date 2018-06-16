@@ -16,7 +16,7 @@ class TransmissionInfoLog:
 
 def check_received_msg_integrity(msg, p, log):
 
-    remainder = perform_modulo2_operation(msg, p)
+    remainder = perform_binary_division(msg, p)
 
     if 1 in remainder:
         # if at least a non-zero bit is included in the remainder bit list,
@@ -55,7 +55,7 @@ def transmit_msg(msg, log, e_number):
     return msg
 
 
-def bit_num_xor_operation(a, p):
+def modulo2_operation(a, p):
 
     result_bit_num = []
 
@@ -68,7 +68,7 @@ def bit_num_xor_operation(a, p):
     return result_bit_num
 
 
-def perform_modulo2_operation(msg, p):
+def perform_binary_division(msg, p):
 
     # a copy of the msg (list) is created, since changing the original msg list will also change the original msg.
     msg_copy = list(msg)
@@ -98,7 +98,7 @@ def perform_modulo2_operation(msg, p):
             pos += 1
 
         if len(temp_bit_num) == len(p):
-            temp_bit_num = bit_num_xor_operation(temp_bit_num, p)
+            temp_bit_num = modulo2_operation(temp_bit_num, p)
 
     # remove any 0's from the front of the number ex. 00010101 --> 10101
 
@@ -128,7 +128,7 @@ def generate_final_message_with_crc_code(msg, p):
     for i in range(len(p) - 1):
         msg_copy.append(0)
 
-    crc_code = perform_modulo2_operation(msg_copy, p)
+    crc_code = perform_binary_division(msg_copy, p)
 
     return msg + crc_code
 
