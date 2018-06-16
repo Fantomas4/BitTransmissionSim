@@ -176,6 +176,10 @@ def print_transmission_log(log):
     print("* Total amount of messages that were correctly detected by the CRC as corrupted: ",
           log.incorrect_msg_detected_count, " (",
           log.incorrect_msg_detected_count / log.total_msg_transferred * 100, "%)")
+    print("* Total amount of messages that were transmitted containing errors but were NOT "
+          "detected by the CRC as corrupted: ", (log.incorrect_msg_transferred_count - log.incorrect_msg_detected_count),
+          " (", (log.incorrect_msg_transferred_count - log.incorrect_msg_detected_count) / log.total_msg_transferred
+          * 100, "%)")
 
 
 def main():
