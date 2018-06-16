@@ -118,7 +118,7 @@ def perform_binary_division(msg, p):
     return temp_bit_num
 
 
-def generate_final_message_with_crc_code(msg, p):
+def generate_final_message_with_fcs(msg, p):
 
     # a copy of the msg (list) is created, since changing the original msg list will also change the original msg.
     msg_copy = list(msg)
@@ -155,7 +155,7 @@ def run_simulation(p_number, k_number, e_number, msg_amount):
     for i in range(msg_amount):
         generated_msg = generate_random_message(k_number)
         # print("generated_msg is: ", generated_msg)
-        final_msg_with_crc_code = generate_final_message_with_crc_code(generated_msg, p_number)
+        final_msg_with_crc_code = generate_final_message_with_fcs(generated_msg, p_number)
         received_msg = transmit_msg(final_msg_with_crc_code, transmission_log, e_number)
 
         check_received_msg_integrity(received_msg, p_number, transmission_log)
@@ -176,10 +176,10 @@ def print_transmission_log(log):
     print("* Total amount of messages that were correctly detected by the CRC as corrupted: ",
           log.incorrect_msg_detected_count, " (",
           log.incorrect_msg_detected_count / log.total_msg_transferred * 100, "%)")
-    print("* Total amount of messages that were transmitted containing errors but were NOT "
-          "detected by the CRC as corrupted: ", (log.incorrect_msg_transferred_count - log.incorrect_msg_detected_count),
-          " (", (log.incorrect_msg_transferred_count - log.incorrect_msg_detected_count) / log.total_msg_transferred
-          * 100, "%)")
+    print("* Total amount of CORRUPTED messages that were NOT detected by the CRC as corrupted: ",
+          (log.incorrect_msg_transferred_count - log.incorrect_msg_detected_count), " (",
+          (log.incorrect_msg_transferred_count - log.incorrect_msg_detected_count) /
+          log.total_msg_transferred * 100, "%)")
 
 
 def main():
