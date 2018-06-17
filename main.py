@@ -154,7 +154,6 @@ def run_simulation(p_number, k_number, e_number, msg_amount):
 
     for i in range(msg_amount):
         generated_msg = generate_random_message(k_number)
-        # print("generated_msg is: ", generated_msg)
         final_msg_with_fcs = generate_final_message_with_fcs(generated_msg, p_number)
         received_msg = transmit_msg(final_msg_with_fcs, transmission_log, e_number)
 
@@ -217,13 +216,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
